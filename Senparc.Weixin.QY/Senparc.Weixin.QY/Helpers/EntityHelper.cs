@@ -59,8 +59,9 @@ namespace Senparc.Weixin.QY.Helpers
 								goto default;
 							}
 							break;
-						case "Int32":
-							prop.SetValue(entity, int.Parse(root.Element(propName).Value), null);
+                        case "Int32":
+                            if (!string.IsNullOrEmpty(root.Element(propName).Value))
+                                prop.SetValue(entity, int.Parse(root.Element(propName).Value), null);
 							break;
 						case "Int64":
 							prop.SetValue(entity, long.Parse(root.Element(propName).Value), null);

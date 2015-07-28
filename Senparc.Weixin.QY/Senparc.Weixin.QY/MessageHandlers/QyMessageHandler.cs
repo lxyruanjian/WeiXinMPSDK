@@ -145,7 +145,7 @@ namespace Senparc.Weixin.QY.MessageHandlers
 
       
 
-        private PostModel _postModel;
+        protected PostModel _postModel;
 
         public QyMessageHandler(Stream inputStream, PostModel postModel, int maxRecordCount = 0)
             : base(inputStream, maxRecordCount, postModel)

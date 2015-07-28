@@ -26,5 +26,6 @@ namespace Senparc.Weixin.QY.Entities
     {
         //以下信息不会出现在微信发过来的信息中，都是企业号后台需要设置（获取的）的信息，用于扩展传参使用
         public string CorpId { get; set; }
+        public string SuiteId { get; set; }
     }
 }

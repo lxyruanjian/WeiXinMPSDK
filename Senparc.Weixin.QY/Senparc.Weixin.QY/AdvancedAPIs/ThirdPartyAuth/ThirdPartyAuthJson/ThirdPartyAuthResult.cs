@@ -115,6 +115,8 @@ namespace Senparc.Weixin.QY.AdvancedAPIs.ThirdPartyAuth
         /// 授权方企业号应用规模
         /// </summary>
         public string corp_agent_max { get; set; }
+
+        public string corp_wxqrcode { get; set; }
     }
 
     public class ThirdParty_AuthInfo
