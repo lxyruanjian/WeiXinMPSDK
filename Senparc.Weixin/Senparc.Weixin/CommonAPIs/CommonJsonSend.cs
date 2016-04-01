@@ -1,5 +1,5 @@
 ﻿/*----------------------------------------------------------------
-    Copyright (C) 2015 Senparc
+    Copyright (C) 2016 Senparc
     
     文件名：CommonJsonSend.cs
     文件功能描述：通过CommonJsonSend中的方法调用接口
@@ -59,14 +59,14 @@ namespace Senparc.Weixin.CommonAPIs
 
             try
             {
-                var url = string.IsNullOrEmpty(accessToken) ? urlFormat : string.Format(urlFormat, accessToken);
+                var url = string.IsNullOrEmpty(accessToken) ? urlFormat : string.Format(urlFormat, accessToken.AsUrlData());
                 switch (sendType)
                 {
                     case CommonJsonSendType.GET:
                         return Get.GetJson<T>(url);
                     case CommonJsonSendType.POST:
                         SerializerHelper serializerHelper = new SerializerHelper();
-                        var jsonString = serializerHelper.GetJsonString(data);
+                        var jsonString = serializerHelper.GetJsonString(data, jsonSetting);
                         using (MemoryStream ms = new MemoryStream())
                         {
                             var bytes = Encoding.UTF8.GetBytes(jsonString);
@@ -87,7 +87,7 @@ namespace Senparc.Weixin.CommonAPIs
                 throw;
             }
         }
-        
+
         #endregion
 
         #region 异步请求
@@ -122,7 +122,7 @@ namespace Senparc.Weixin.CommonAPIs
         {
             try
             {
-                var url = string.IsNullOrEmpty(accessToken) ? urlFormat : string.Format(urlFormat, accessToken);
+                var url = string.IsNullOrEmpty(accessToken) ? urlFormat : string.Format(urlFormat, accessToken.AsUrlData());
 
                 switch (sendType)
                 {

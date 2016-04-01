@@ -1,5 +1,5 @@
 ﻿/*----------------------------------------------------------------
-    Copyright (C) 2015 Senparc
+    Copyright (C) 2016 Senparc
     
     文件名：CommonApi.cs
     文件功能描述：通用接口(用于和微信服务器通讯，一般不涉及自有网站服务器的通讯)
@@ -47,7 +47,7 @@ namespace Senparc.Weixin.MP.CommonAPIs
         {
             //注意：此方法不能再使用ApiHandlerWapper.TryCommonApi()，否则会循环
             var url = string.Format("https://api.weixin.qq.com/cgi-bin/token?grant_type={0}&appid={1}&secret={2}",
-                                    grant_type, appid, secret);
+                                    grant_type.AsUrlData(), appid.AsUrlData(), secret.AsUrlData());
 
             AccessTokenResult result = Get.GetJson<AccessTokenResult>(url);
             return result;
@@ -64,7 +64,7 @@ namespace Senparc.Weixin.MP.CommonAPIs
             return ApiHandlerWapper.TryCommonApi(accessToken =>
             {
                 var url = string.Format("http://api.weixin.qq.com/cgi-bin/user/info?access_token={0}&openid={1}",
-                                        accessToken, openId);
+                                        accessToken.AsUrlData(), openId.AsUrlData());
                 WeixinUserInfoResult result = Get.GetJson<WeixinUserInfoResult>(url);
                 return result;
 
@@ -96,7 +96,7 @@ namespace Senparc.Weixin.MP.CommonAPIs
             return ApiHandlerWapper.TryCommonApi(accessToken =>
         {
             var url = string.Format("https://api.weixin.qq.com/cgi-bin/ticket/getticket?access_token={0}&type={1}",
-                                    accessToken, type);
+                                    accessToken.AsUrlData(), type.AsUrlData());
 
             JsApiTicketResult result = Get.GetJson<JsApiTicketResult>(url);
             return result;

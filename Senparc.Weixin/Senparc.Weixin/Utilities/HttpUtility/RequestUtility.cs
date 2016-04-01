@@ -1,5 +1,5 @@
 ﻿/*----------------------------------------------------------------
-    Copyright (C) 2015 Senparc
+    Copyright (C) 2016 Senparc
     
     文件名：RequestUtility.cs
     文件功能描述：获取请求结果
@@ -29,6 +29,38 @@ namespace Senparc.Weixin.HttpUtility
 {
     public static class RequestUtility
     {
+        #region 代理
+
+        private static WebProxy _webproxy = null;
+
+        /// <summary>
+        /// 设置Web代理
+        /// </summary>
+        /// <param name="host"></param>
+        /// <param name="port"></param>
+        /// <param name="username"></param>
+        /// <param name="password"></param>
+        public static void SetHttpProxy(string host, string port, string username, string password)
+        {
+            ICredentials cred;
+            cred = new NetworkCredential(username, password);
+            if (!string.IsNullOrEmpty(host))
+            {
+                _webproxy = new WebProxy(host + ":" + port ?? "80", true, null, cred);
+            }
+        }
+
+        /// <summary>
+        /// 清除Web代理状态
+        /// </summary>
+        public static void RemoveHttpProxy()
+        {
+            _webproxy = null;
+        }
+
+        #endregion
+
+
         #region 同步方法
 
         /// <summary>
@@ -39,6 +71,7 @@ namespace Senparc.Weixin.HttpUtility
         public static string HttpGet(string url, Encoding encoding = null)
         {
             WebClient wc = new WebClient();
+            wc.Proxy = _webproxy;
             wc.Encoding = encoding ?? Encoding.UTF8;
             //if (encoding != null)
             //{
@@ -59,6 +92,7 @@ namespace Senparc.Weixin.HttpUtility
             HttpWebRequest request = (HttpWebRequest)WebRequest.Create(url);
             request.Method = "GET";
             request.Timeout = timeOut;
+            request.Proxy = _webproxy;
 
             if (cookieContainer != null)
             {
@@ -110,6 +144,7 @@ namespace Senparc.Weixin.HttpUtility
             HttpWebRequest request = (HttpWebRequest)WebRequest.Create(url);
             request.Method = "POST";
             request.Timeout = timeOut;
+            request.Proxy = _webproxy;
 
             if (checkValidationResult)
             {
@@ -262,6 +297,7 @@ namespace Senparc.Weixin.HttpUtility
         public static async Task<string> HttpGetAsync(string url, Encoding encoding = null)
         {
             WebClient wc = new WebClient();
+            wc.Proxy = _webproxy;
             wc.Encoding = encoding ?? Encoding.UTF8;
             //if (encoding != null)
             //{
@@ -282,6 +318,7 @@ namespace Senparc.Weixin.HttpUtility
             HttpWebRequest request = (HttpWebRequest)WebRequest.Create(url);
             request.Method = "GET";
             request.Timeout = timeOut;
+            request.Proxy = _webproxy;
 
             if (cookieContainer != null)
             {
@@ -332,6 +369,7 @@ namespace Senparc.Weixin.HttpUtility
             HttpWebRequest request = (HttpWebRequest)WebRequest.Create(url);
             request.Method = "POST";
             request.Timeout = timeOut;
+            request.Proxy = _webproxy;
 
             if (checkValidationResult)
             {
@@ -566,6 +604,18 @@ namespace Senparc.Weixin.HttpUtility
         public static string UrlDecode(this string url)
         {
             return System.Web.HttpUtility.UrlDecode(url);
+        }
+
+        /// <summary>
+        /// <para>将 URL 中的参数名称/值编码为合法的格式。</para>
+        /// <para>可以解决类似这样的问题：假设参数名为 tvshow, 参数值为 Tom&Jerry，如果不编码，可能得到的网址： http://a.com/?tvshow=Tom&Jerry&year=1965 编码后则为：http://a.com/?tvshow=Tom%26Jerry&year=1965 </para>
+        /// <para>实践中经常导致问题的字符有：'&', '?', '=' 等</para>
+        /// </summary>
+        /// <param name="data"></param>
+        /// <returns></returns>
+        public static string AsUrlData(this string data)
+        {
+            return Uri.EscapeDataString(data);
         }
     }
 }

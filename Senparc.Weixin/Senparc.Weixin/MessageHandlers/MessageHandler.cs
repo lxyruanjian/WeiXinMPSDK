@@ -1,5 +1,5 @@
 ﻿/*----------------------------------------------------------------
-    Copyright (C) 2015 Senparc
+    Copyright (C) 2016 Senparc
     
     文件名：MessageHandler.cs
     文件功能描述：微信请求的集中处理方法
@@ -212,14 +212,15 @@ namespace Senparc.Weixin.MessageHandlers
 
         //public abstract TR CreateResponseMessage<TR>() where TR : ResponseMessageBase;
 
-        /// <summary>
-        /// 执行微信请求
-        /// </summary>
-        public abstract void Execute();
 
         public virtual void OnExecuting()
         {
         }
+
+        /// <summary>
+        /// 执行微信请求
+        /// </summary>
+        public abstract void Execute();
 
         public virtual void OnExecuted()
         {

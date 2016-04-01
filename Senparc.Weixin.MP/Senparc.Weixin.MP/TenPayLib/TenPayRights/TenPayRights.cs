@@ -1,5 +1,5 @@
 ﻿/*----------------------------------------------------------------
-    Copyright (C) 2015 Senparc
+    Copyright (C) 2016 Senparc
  
     文件名：TenPayRights.cs
     文件功能描述：微信支付维权接口
@@ -35,7 +35,7 @@ namespace Senparc.Weixin.MP.AdvancedAPIs
         public static WxJsonResult UpDateFeedBack(string accessToken, string openId, string feedBackId)
         {
             var urlFormat = "https://api.weixin.qq.com/payfeedback/update?access_token={0}&openid={1}&feedbackid={2}";
-            var url = string.Format(urlFormat, accessToken, openId, feedBackId);
+            var url = string.Format(urlFormat, accessToken.AsUrlData(), openId.AsUrlData(), feedBackId.AsUrlData());
 
             return Get.GetJson<WxJsonResult>(url);
         }

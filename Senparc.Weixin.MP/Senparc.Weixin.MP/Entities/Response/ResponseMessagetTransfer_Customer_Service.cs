@@ -1,5 +1,5 @@
 ﻿/*----------------------------------------------------------------
-    Copyright (C) 2015 Senparc
+    Copyright (C) 2016 Senparc
     
     文件名：ResponseMessagetTransfer_Customer_Service.cs
     文件功能描述：响应回复多客服消息
@@ -15,6 +15,9 @@ using System.Collections.Generic;
 
 namespace Senparc.Weixin.MP.Entities
 {
+    /// <summary>
+    /// 响应回复多客服消息
+    /// </summary>
 	public class ResponseMessageTransfer_Customer_Service : ResponseMessageBase, IResponseMessageBase
 	{
 		public ResponseMessageTransfer_Customer_Service()

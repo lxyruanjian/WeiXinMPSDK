@@ -1,5 +1,5 @@
 ﻿/*----------------------------------------------------------------
-    Copyright (C) 2015 Senparc
+    Copyright (C) 2016 Senparc
     
     文件名：ResponseMessageBase.cs
     文件功能描述：响应回复消息基类
@@ -26,7 +26,7 @@ namespace Senparc.Weixin.MP.Entities
 	}
 
 	/// <summary>
-	/// 响应回复消息
+	/// 微信公众号响应回复消息
 	/// </summary>
     public class ResponseMessageBase : Weixin.Entities.ResponseMessageBase, IResponseMessageBase
 	{
@@ -151,7 +151,7 @@ namespace Senparc.Weixin.MP.Entities
                         responseMessage = new ResponseMessageTransfer_Customer_Service();
 						break;
 				}
-
+                
 				responseMessage.FillEntityWithXml(doc);
 				return responseMessage;
 			}

@@ -1,5 +1,5 @@
 ﻿/*----------------------------------------------------------------
-    Copyright (C) 2015 Senparc
+    Copyright (C) 2016 Senparc
     
     文件名：AsynchronousApi.cs
     文件功能描述：异步任务接口
@@ -200,7 +200,7 @@ namespace Senparc.Weixin.QY.AdvancedAPIs
         public static AsynchronousInviteUserResult GetInviteUserResult(string accessToken, string jobId)
         {
             var url = string.Format("https://qyapi.weixin.qq.com/cgi-bin/batch/getresult?access_token={0}&jobid={1}",
-                                    accessToken, jobId);
+                                    accessToken.AsUrlData(), jobId.AsUrlData());
 
             return Get.GetJson<AsynchronousInviteUserResult>(url);
         }
@@ -214,7 +214,7 @@ namespace Senparc.Weixin.QY.AdvancedAPIs
         public static AsynchronousReplaceUserResult GetReplaceUserResult(string accessToken, string jobId)
         {
             var url = string.Format("https://qyapi.weixin.qq.com/cgi-bin/batch/getresult?access_token={0}&jobid={1}",
-                                    accessToken, jobId);
+                                    accessToken.AsUrlData(), jobId.AsUrlData());
 
             return Get.GetJson<AsynchronousReplaceUserResult>(url);
         }
@@ -228,7 +228,7 @@ namespace Senparc.Weixin.QY.AdvancedAPIs
         public static AsynchronousReplacePartyResult GetReplacePartyResult(string accessToken, string jobId)
         {
             var url = string.Format("https://qyapi.weixin.qq.com/cgi-bin/batch/getresult?access_token={0}&jobid={1}",
-                                    accessToken, jobId);
+                                    accessToken.AsUrlData(), jobId.AsUrlData());
 
             return Get.GetJson<AsynchronousReplacePartyResult>(url);
         }

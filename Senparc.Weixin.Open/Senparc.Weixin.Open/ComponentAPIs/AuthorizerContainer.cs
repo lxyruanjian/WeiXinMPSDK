@@ -1,21 +1,28 @@
 ﻿/*----------------------------------------------------------------
-    Copyright (C) 2015 Senparc
-    
+    Copyright (C) 2016 Senparc
+
     文件名：AuthorizerContainer.cs
     文件功能描述：通用接口JsApiTicket容器，用于OPEN第三方JSSDK自动管理JsApiTicket，如果过期会重新获取
-    
-    
+
+
     创建标识：Senparc - 20150211
-    
+
     修改标识：renny - 20150921
     修改描述：整理接口
-    
+
     修改标识：senparc - 20151004
     修改描述：文件名从JsApiTicketContainer.cs变为AuthorizerContainer.cs，用于集成所有授权方信息
 
-    ----------------------------------------------------------------*/
+    修改标识：Senparc - 20160206
+    修改描述：将public object Lock更改为internal object Lock
+
+    修改标识：Senparc - 20160318
+    修改描述：v1.6.4 使用FlushCache.CreateInstance使注册过程立即生效
+
+----------------------------------------------------------------*/
 
 using System;
+using Senparc.Weixin.CacheUtility;
 using Senparc.Weixin.Containers;
 using Senparc.Weixin.Open.Entities;
 using Senparc.Weixin.Open.Exceptions;
@@ -25,17 +32,26 @@ namespace Senparc.Weixin.Open.ComponentAPIs
     /// <summary>
     /// 之前的JsApiTicketBag
     /// </summary>
+    [Serializable]
     public class AuthorizerBag : BaseContainerBag
     {
         /// <summary>
         /// 授权方AppId，缓存中实际的Key
         /// </summary>
-        public string AuthorizerAppId { get; set; }
+        public string AuthorizerAppId
+        {
+            get { return _authorizerAppId; }
+            set { base.SetContainerProperty(ref _authorizerAppId, value); }
+        }
 
         /// <summary>
         /// 第三方平台AppId
         /// </summary>
-        public string ComponentAppId { get; set; }
+        public string ComponentAppId
+        {
+            get { return _componentAppId; }
+            set { base.SetContainerProperty(ref _componentAppId, value); }
+        }
 
         ///// <summary>
         ///// 从ComponentContainer取过来的对应ComponentAppId的ComponentBag
@@ -59,26 +75,61 @@ namespace Senparc.Weixin.Open.ComponentAPIs
         }
 
 
-        public JsApiTicketResult JsApiTicketResult { get; set; }
-        public DateTime JsApiTicketExpireTime { get; set; }
+        public JsApiTicketResult JsApiTicketResult
+        {
+            get { return _jsApiTicketResult; }
+            set { base.SetContainerProperty(ref _jsApiTicketResult, value); }
+        }
+
+        public DateTime JsApiTicketExpireTime
+        {
+            get { return _jsApiTicketExpireTime; }
+            set { base.SetContainerProperty(ref _jsApiTicketExpireTime, value); }
+        }
 
         /// <summary>
         /// 授权信息（请使用TryUpdateAuthorizationInfo()方法进行更新）
         /// </summary>
-        public AuthorizationInfo AuthorizationInfo { get; set; }
-        public DateTime AuthorizationInfoExpireTime { get; set; }
+        public AuthorizationInfo AuthorizationInfo
+        {
+            get { return _authorizationInfo; }
+            set
+            {
+                base.SetContainerProperty(ref _authorizationInfo, value);
+                //base.SetContainerProperty(ref _authorizationInfo, value, nameof(FullAuthorizerInfoResult));
+            }
+        }
+
+        public DateTime AuthorizationInfoExpireTime
+        {
+            get { return _authorizationInfoExpireTime; }
+            set { base.SetContainerProperty(ref _authorizationInfoExpireTime, value); }
+        }
 
         /// <summary>
         /// 授权方资料信息
         /// </summary>
-        public AuthorizerInfo AuthorizerInfo { get; set; }
+        public AuthorizerInfo AuthorizerInfo
+        {
+            get { return _authorizerInfo; }
+            set { base.SetContainerProperty(ref _authorizerInfo, value); }
+        }
+
         //public DateTime AuthorizerInfoExpireTime { get; set; }
 
 
         /// <summary>
         /// 只针对这个AppId的锁
         /// </summary>
-        public object Lock = new object();
+        internal object Lock = new object();
+
+        private string _authorizerAppId;
+        private string _componentAppId;
+        private JsApiTicketResult _jsApiTicketResult;
+        private DateTime _jsApiTicketExpireTime;
+        private AuthorizationInfo _authorizationInfo;
+        private DateTime _authorizationInfoExpireTime;
+        private AuthorizerInfo _authorizerInfo;
     }
 
     /// <summary>
@@ -98,20 +149,23 @@ namespace Senparc.Weixin.Open.ComponentAPIs
                 throw new WeixinOpenException(string.Format("注册AuthorizerContainer之前，必须先注册对应的ComponentContainer！ComponentAppId：{0},AuthorizerAppId:{1}", componentAppId, authorizerAppId));
             }
 
-            Update(authorizerAppId, new AuthorizerBag()
+            using (FlushCache.CreateInstance())
             {
-                AuthorizerAppId = authorizerAppId,
-                ComponentAppId = componentAppId,
+                Update(authorizerAppId, new AuthorizerBag()
+                {
+                    AuthorizerAppId = authorizerAppId,
+                    ComponentAppId = componentAppId,
 
-                AuthorizationInfo = new AuthorizationInfo(),
-                AuthorizationInfoExpireTime = DateTime.MinValue,
+                    AuthorizationInfo = new AuthorizationInfo(),
+                    AuthorizationInfoExpireTime = DateTime.MinValue,
 
-                AuthorizerInfo = new AuthorizerInfo(),
-                //AuthorizerInfoExpireTime = DateTime.MinValue,
+                    AuthorizerInfo = new AuthorizerInfo(),
+                    //AuthorizerInfoExpireTime = DateTime.MinValue,
 
-                JsApiTicketResult = new JsApiTicketResult(),
-                JsApiTicketExpireTime = DateTime.MinValue,
-            });
+                    JsApiTicketResult = new JsApiTicketResult(),
+                    JsApiTicketExpireTime = DateTime.MinValue,
+                });
+            }
 
             //TODO：这里也可以考虑尝试进行授权（会影响速度）
         }
@@ -253,7 +307,7 @@ namespace Senparc.Weixin.Open.ComponentAPIs
                 if (refreshTokenChanged)
                 {
                     ComponentContainer.AuthorizerTokenRefreshedFunc(authorizerAppid,
-                        new RefreshAuthorizerTokenResult(authorizationInfo.authorizer_access_token, 
+                        new RefreshAuthorizerTokenResult(authorizationInfo.authorizer_access_token,
                             authorizationInfo.authorizer_refresh_token, authorizationInfo.expires_in));
                 }
             }
@@ -296,7 +350,7 @@ namespace Senparc.Weixin.Open.ComponentAPIs
 
         /// <summary>
         /// 刷新AuthorizerToken
-        /// 
+        ///
         /// </summary>
         /// <param name="componentAccessToken"></param>
         /// <param name="componentAppId"></param>
