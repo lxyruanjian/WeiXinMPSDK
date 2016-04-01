@@ -1,5 +1,5 @@
 ﻿/*----------------------------------------------------------------
-    Copyright (C) 2015 Senparc
+    Copyright (C) 2016 Senparc
     
     文件名：PreAuthCodeResult.cs
     文件功能描述：获取预授权码返回结果
@@ -8,6 +8,7 @@
     创建标识：Senparc - 20150430
 ----------------------------------------------------------------*/
 
+using System;
 using Senparc.Weixin.Entities;
 
 namespace Senparc.Weixin.Open.Entities
@@ -15,6 +16,7 @@ namespace Senparc.Weixin.Open.Entities
     /// <summary>
     /// 获取预授权码返回结果
     /// </summary>
+    [Serializable]
     public class PreAuthCodeResult: WxJsonResult
     {
         /// <summary>

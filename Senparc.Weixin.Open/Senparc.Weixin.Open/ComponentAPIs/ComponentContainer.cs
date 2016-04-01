@@ -1,10 +1,10 @@
 ﻿/*----------------------------------------------------------------
-    Copyright (C) 2015 Senparc
-    
+    Copyright (C) 2016 Senparc
+
     文件名：ComponentContainer.cs
     文件功能描述：通用接口ComponentAccessToken容器，用于自动管理ComponentAccessToken，如果过期会重新获取
-    
-    
+
+
     创建标识：Senparc - 20150430
 
     修改标识：Senparc - 20151004
@@ -13,9 +13,19 @@
     修改标识：Senparc - 20151005
     修改描述：v1.4.3 添加ComponentVerifyTicketExpireTime及自动更新机制
 
+    修改标识：Senparc - 20160206
+    修改描述：将public object Lock更改为internal object Lock
+
+    修改标识：Senparc - 20160318
+    修改描述：13.6.10 使用FlushCache.CreateInstance使注册过程立即生效
+
+    修改标识：Senparc - 20160318
+    修改描述：v1.6.4 使用FlushCache.CreateInstance使注册过程立即生效
+
 ----------------------------------------------------------------*/
 
 using System;
+using Senparc.Weixin.CacheUtility;
 using Senparc.Weixin.Containers;
 using Senparc.Weixin.Open.CommonAPIs;
 using Senparc.Weixin.Open.Entities;
@@ -26,54 +36,114 @@ namespace Senparc.Weixin.Open.ComponentAPIs
     /// <summary>
     /// 第三方APP信息包
     /// </summary>
+    [Serializable]
     public class ComponentBag : BaseContainerBag
     {
         /// <summary>
         /// 第三方平台AppId
         /// </summary>
-        public string ComponentAppId { get; set; }
+        public string ComponentAppId
+        {
+            get { return _componentAppId; }
+            set { base.SetContainerProperty(ref _componentAppId, value); }
+
+        }
+
         /// <summary>
         /// 第三方平台AppSecret
         /// </summary>
-        public string ComponentAppSecret { get; set; }
+        public string ComponentAppSecret
+        {
+            get { return _componentAppSecret; }
+            set { base.SetContainerProperty(ref _componentAppSecret, value); }
+
+        }
 
         /// <summary>
         /// 第三方平台ComponentVerifyTicket（每隔10分钟微信会主动推送到服务器，IP必须在白名单内）
         /// </summary>
-        public string ComponentVerifyTicket { get; set; }
+        public string ComponentVerifyTicket
+        {
+            get { return _componentVerifyTicket; }
+            set { base.SetContainerProperty(ref _componentVerifyTicket, value); }
+
+        }
+
         /// <summary>
         /// 第三方平台ComponentVerifyTicket过期时间（实际上过期之后仍然可以使用一段时间）
         /// </summary>
-        public DateTime ComponentVerifyTicketExpireTime { get; set; }
+        public DateTime ComponentVerifyTicketExpireTime
+        {
+            get { return _componentVerifyTicketExpireTime; }
+            set { base.SetContainerProperty(ref _componentVerifyTicketExpireTime, value); }
+
+        }
 
         /// <summary>
         /// ComponentAccessTokenResult
         /// </summary>
-        public ComponentAccessTokenResult ComponentAccessTokenResult { get; set; }
+        public ComponentAccessTokenResult ComponentAccessTokenResult
+        {
+            get { return _componentAccessTokenResult; }
+            set { base.SetContainerProperty(ref _componentAccessTokenResult, value); }
+
+        }
+
         /// <summary>
         /// ComponentAccessToken过期时间
         /// </summary>
-        public DateTime ComponentAccessTokenExpireTime { get; set; }
+        public DateTime ComponentAccessTokenExpireTime
+        {
+            get { return _componentAccessTokenExpireTime; }
+            set { base.SetContainerProperty(ref _componentAccessTokenExpireTime, value); }
+
+        }
 
 
         /// <summary>
         /// PreAuthCodeResult 预授权码结果
         /// </summary>
-        public PreAuthCodeResult PreAuthCodeResult { get; set; }
+        public PreAuthCodeResult PreAuthCodeResult
+        {
+            get { return _preAuthCodeResult; }
+            set { base.SetContainerProperty(ref _preAuthCodeResult, value); }
+
+        }
+
         /// <summary>
         /// 预授权码过期时间
         /// </summary>
-        public DateTime PreAuthCodeExpireTime { get; set; }
+        public DateTime PreAuthCodeExpireTime
+        {
+            get { return _preAuthCodeExpireTime; }
+            set { base.SetContainerProperty(ref _preAuthCodeExpireTime, value); }
+
+        }
 
         /// <summary>
         /// AuthorizerAccessToken
         /// </summary>
-        public string AuthorizerAccessToken { get; set; }
+        public string AuthorizerAccessToken
+        {
+            get { return _authorizerAccessToken; }
+            set { base.SetContainerProperty(ref _authorizerAccessToken, value); }
+
+        }
 
         /// <summary>
         /// 只针对这个AppId的锁
         /// </summary>
-        public object Lock = new object();
+        internal object Lock = new object();
+
+        private string _componentAppId;
+        private string _componentAppSecret;
+        private string _componentVerifyTicket;
+        private DateTime _componentVerifyTicketExpireTime;
+        private ComponentAccessTokenResult _componentAccessTokenResult;
+        private DateTime _componentAccessTokenExpireTime;
+        private PreAuthCodeResult _preAuthCodeResult;
+        private DateTime _preAuthCodeExpireTime;
+        private string _authorizerAccessToken;
 
         /// <summary>
         /// ComponentBag
@@ -126,7 +196,7 @@ namespace Senparc.Weixin.Open.ComponentAPIs
         /// <summary>
         /// AuthorizerAccessToken更新后的回调
         /// </summary>
-        public static Action<string,RefreshAuthorizerTokenResult> AuthorizerTokenRefreshedFunc = null;
+        public static Action<string, RefreshAuthorizerTokenResult> AuthorizerTokenRefreshedFunc = null;
 
 
         /// <summary>
@@ -137,8 +207,11 @@ namespace Senparc.Weixin.Open.ComponentAPIs
         /// <param name="getComponentVerifyTicketFunc">获取ComponentVerifyTicket的方法</param>
         /// <param name="getAuthorizerRefreshTokenFunc">从数据库中获取已存的AuthorizerAccessToken的方法</param>
         /// <param name="authorizerTokenRefreshedFunc">AuthorizerAccessToken更新后的回调</param>
-        public static void Register(string componentAppId, string componentAppSecret, Func<string, string> getComponentVerifyTicketFunc, Func<string, string> getAuthorizerRefreshTokenFunc, Action<string,RefreshAuthorizerTokenResult> authorizerTokenRefreshedFunc)
+        public static void Register(string componentAppId, string componentAppSecret, Func<string, string> getComponentVerifyTicketFunc, Func<string, string> getAuthorizerRefreshTokenFunc, Action<string, RefreshAuthorizerTokenResult> authorizerTokenRefreshedFunc)
         {
+            //激活消息列队线程
+
+
             if (GetComponentVerifyTicketFunc == null)
             {
                 GetComponentVerifyTicketFunc = getComponentVerifyTicketFunc;
@@ -146,11 +219,14 @@ namespace Senparc.Weixin.Open.ComponentAPIs
                 AuthorizerTokenRefreshedFunc = authorizerTokenRefreshedFunc;
             }
 
-            Update(componentAppId, new ComponentBag()
+            using (FlushCache.CreateInstance())
             {
-                ComponentAppId = componentAppId,
-                ComponentAppSecret = componentAppSecret,
-            });
+                Update(componentAppId, new ComponentBag()
+                {
+                    ComponentAppId = componentAppId,
+                    ComponentAppSecret = componentAppSecret,
+                });
+            }
         }
 
         /// <summary>
@@ -160,7 +236,7 @@ namespace Senparc.Weixin.Open.ComponentAPIs
         /// <returns></returns>
         public new static bool CheckRegistered(string componentAppId)
         {
-            return ItemCollection.ContainsKey(componentAppId);
+            return ItemCollection.CheckExisted(componentAppId);
         }
 
 

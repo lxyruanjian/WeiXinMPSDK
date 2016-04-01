@@ -1,5 +1,5 @@
 ﻿/*----------------------------------------------------------------
-    Copyright (C) 2015 Senparc
+    Copyright (C) 2016 Senparc
     
     文件名：Config.cs
     文件功能描述：全局设置
@@ -11,8 +11,10 @@
     修改描述：整理接口
 ----------------------------------------------------------------*/
 
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
+using System.Threading;
 
 namespace Senparc.Weixin
 {

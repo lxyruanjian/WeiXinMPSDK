@@ -42,7 +42,7 @@ namespace Senparc.Weixin.Cache
         TValue Get(TKey key);
 
         /// <summary>
-        /// 获取所有细信息
+        /// 获取所有缓存信息集合
         /// </summary>
         /// <returns></returns>
         IDictionary<TKey, TValue> GetAll();
@@ -50,10 +50,21 @@ namespace Senparc.Weixin.Cache
         /// <summary>
         /// 检查是否存在Key及对象
         /// </summary>
-        /// <param name="key"></param>
+        /// <param name="key">缓存键</param>
         /// <returns></returns>
         bool CheckExisted(TKey key);
 
+        /// <summary>
+        /// 获取缓存集合总数（注意：每个缓存框架的计数对象不一定一致！）
+        /// </summary>
+        /// <returns></returns>
         long GetCount();
+
+        /// <summary>
+        /// 更新缓存
+        /// </summary>
+        /// <param name="key">缓存键</param>
+        /// <param name="value">缓存值</param>
+        void Update(TKey key, TValue value);
     }
 }

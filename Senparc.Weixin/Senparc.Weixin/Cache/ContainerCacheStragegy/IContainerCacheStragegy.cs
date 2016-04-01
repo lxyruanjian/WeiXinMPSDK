@@ -7,21 +7,16 @@ using Senparc.Weixin.Containers;
 
 namespace Senparc.Weixin.Cache
 {
-    //public interface IContainerCacheStragegy : IBaseCacheStrategy
-    //{
-    //}
-
-    public interface IContainerItemCollection : IDictionary<string, IBaseContainerBag>
+    /// <summary>
+    /// 容器缓存策略接口
+    /// </summary>
+    public interface IContainerCacheStragegy : IBaseCacheStrategy<string, IContainerItemCollection>
     {
-    }
-
-    public class ContainerItemCollection : Dictionary<string, IBaseContainerBag>, IContainerItemCollection
-    {
-    }
-
-
-    public interface IContainerCacheStragegy : /*IContainerCacheStragegy,*/ IBaseCacheStrategy<string, IContainerItemCollection>
-    //where TContainerBag : class, IBaseContainerBag
-    {
+        /// <summary>
+        /// 更新ContainerBag
+        /// </summary>
+        /// <param name="key"></param>
+        /// <param name="containerBag"></param>
+        void UpdateContainerBag(string key, IBaseContainerBag containerBag);
     }
 }

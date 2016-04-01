@@ -1,5 +1,5 @@
 ﻿/*----------------------------------------------------------------
-    Copyright (C) 2015 Senparc
+    Copyright (C) 2016 Senparc
     
     文件名：TenPayController.cs
     文件功能描述：微信支付Controller
@@ -137,6 +137,7 @@ namespace Senparc.Weixin.MP.Sample.Controllers
             //string paySignDebuginfo = paySignReqHandler.getDebugInfo();
             //Response.Write("<br/>paySignDebuginfo:" + paySignDebuginfo + "<br/>");
 
+            //TODO：和JSSDK一样整合信息包
             ViewData["appId"] = TenPayInfo.AppId;
             ViewData["timeStamp"] = timeStamp;
             ViewData["nonceStr"] = nonceStr;

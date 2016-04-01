@@ -27,6 +27,7 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <Prefer32Bit>false</Prefer32Bit>
+    <PlatformTarget>AnyCPU</PlatformTarget>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -36,6 +37,24 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <Prefer32Bit>false</Prefer32Bit>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x86'">
+    <DebugSymbols>true</DebugSymbols>
+    <OutputPath>bin\x86\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <DebugType>full</DebugType>
+    <PlatformTarget>x86</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x86'">
+    <OutputPath>bin\x86\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <Optimize>true</Optimize>
+    <DebugType>pdbonly</DebugType>
+    <PlatformTarget>x86</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Microsoft.CSharp" />
@@ -73,11 +92,12 @@
     <Compile Include="AdvancedAPIs\Semantic\SemanticTest.cs" />
     <Compile Include="AdvancedAPIs\ShakeAround\ShakeAroundTest.cs" />
     <Compile Include="AdvancedAPIs\Template\TemplateTest.cs" />
-    <Compile Include="CommonAPIs\JsApiTicketContainerTest.cs" />
+    <Compile Include="CommonAPIs\Containers\JsApiTicketContainerTest.cs" />
     <Compile Include="Entities\Request\PostModelTest.cs" />
     <Compile Include="MessageHandlers\MessageHandlers_OmitRepeatMessageTest.cs" />
     <Compile Include="RequestMessageFactoryTest.cs" />
     <Compile Include="Senparc.Weixin.Utilites\HttpUtility\RequestUtilityTests.cs" />
+    <Compile Include="TenPayV3\RedPackApiTest.cs" />
     <Compile Include="TenPay\TenPayRightsTest.cs" />
     <Compile Include="AdvancedAPIs\User\CustomTest.cs" />
     <Compile Include="TenPay\TenPayTest.cs" />
@@ -85,7 +105,7 @@
     <Compile Include="AdvancedAPIs\WeixinShop\ShelvesTest.cs" />
     <Compile Include="Agents\MessageAgentTest.cs" />
     <Compile Include="CheckSignatureTest.cs" />
-    <Compile Include="CommonAPIs\AccessTokenContainerTest.cs" />
+    <Compile Include="CommonAPIs\Containers\AccessTokenContainerTest.cs" />
     <Compile Include="CommonAPIs\CommonApiTest.cs" />
     <Compile Include="Context\MessageContainerTest.cs" />
     <Compile Include="Context\WeixinContextTest.cs" />
@@ -121,6 +141,9 @@
       <Project>{1d815fbf-451c-4e23-939c-cb80172f445c}</Project>
       <Name>Senparc.Weixin.MP</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Utilities\" />
   </ItemGroup>
   <Choose>
     <When Condition="'$(VisualStudioVersion)' == '10.0' And '$(IsCodedUITest)' == 'True'">

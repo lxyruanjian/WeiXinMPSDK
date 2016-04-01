@@ -9,26 +9,26 @@ using Senparc.Weixin.Containers;
 
 namespace Senparc.Weixin.Cache
 {
+    /// <summary>
+    /// 全局静态数据源帮助类
+    /// </summary>
     public static class LocalCacheHelper
     {
-
         /// <summary>
         /// 所有数据集合的列表
         /// </summary>
-        public static IDictionary<string, IContainerItemCollection> LocalCache { get; set; }
+        internal static IDictionary<string, IContainerItemCollection> LocalCache { get; set; }
 
         static LocalCacheHelper()
         {
             LocalCache = new Dictionary<string, IContainerItemCollection>(StringComparer.OrdinalIgnoreCase);
         }
-
     }
 
     /// <summary>
     /// 本地容器缓存策略
     /// </summary>
-    /// <typeparam name="TContainerBag">容器内</typeparam>
-    public class LocalContainerCacheStrategy : IContainerCacheStragegy
+    public sealed class LocalContainerCacheStrategy : IContainerCacheStragegy
     //where TContainerBag : class, IBaseContainerBag, new()
     {
         #region 数据源
@@ -64,10 +64,10 @@ namespace Senparc.Weixin.Cache
             internal static readonly LocalContainerCacheStrategy instance = new LocalContainerCacheStrategy();
         }
 
+
         #endregion
 
         #region ILocalCacheStrategy 成员
-
 
         public string CacheSetKey { get; set; }
 
@@ -78,20 +78,25 @@ namespace Senparc.Weixin.Cache
             {
                 return;
             }
-
-            LocalCacheHelper.LocalCache[key] = value;
+            _cache[key] = value;
         }
 
         public void RemoveFromCache(string key)
         {
-            LocalCacheHelper.LocalCache.Remove(key);
+            _cache.Remove(key);
         }
 
         public IContainerItemCollection Get(string key)
         {
-            if (!_cache.ContainsKey(key))
+            if (string.IsNullOrEmpty(key))
             {
-                _cache[key] = new ContainerItemCollection();
+                return null;
+            }
+
+            if (!CheckExisted(key))
+            {
+                return null;
+                //InsertToCache(key, new ContainerItemCollection());
             }
 
             return _cache[key];
@@ -99,7 +104,6 @@ namespace Senparc.Weixin.Cache
 
         public IDictionary<string, IContainerItemCollection> GetAll()
         {
-            //var list = _collectionList.Values.ToList();
             return _cache;
         }
 
@@ -111,6 +115,22 @@ namespace Senparc.Weixin.Cache
         public long GetCount()
         {
             return _cache.Count;
+        }
+
+        public void Update(string key, IContainerItemCollection value)
+        {
+            _cache[key] = value;
+        }
+
+        public void UpdateContainerBag(string key, IBaseContainerBag bag)
+        {
+            if (_cache.ContainsKey(key))
+            {
+                var containerItemCollection = Get(key);
+                containerItemCollection[bag.Key] = bag;
+
+                //因为这里获取的是containerItemCollection引用对象，所以不必再次更新整个containerItemCollection到缓存
+            }
         }
 
         #endregion

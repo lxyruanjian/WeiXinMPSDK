@@ -1,5 +1,5 @@
 ﻿/*----------------------------------------------------------------
-    Copyright (C) 2015 Senparc
+    Copyright (C) 2016 Senparc
     
     文件名：RequestMessageText.cs
     文件功能描述：接收普通文本消息
@@ -13,7 +13,7 @@
 
 namespace Senparc.Weixin.MP.Entities
 {
-    public class RequestMessageText : RequestMessageBase,IRequestMessageBase
+    public class RequestMessageText : RequestMessageBase, IRequestMessageBase
     {
         public override RequestMsgType MsgType
         {
