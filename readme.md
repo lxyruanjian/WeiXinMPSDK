@@ -1,18 +1,22 @@
 微信C# SDK
 =================
 
+> 如果需要使用或修改此项目的源代码，建议先Fork。也欢迎将您修改的通用版本Pull Request过来。
+
+> .NET Framework 版本及 .NET Core 版本代码分别位于 DotNetFramework 和 DotNetCore（完善中） 文件夹下，结构基本保持一致，以下介绍以 .NET Framework 版本为例。
+
 | # | 模块功能 | DLL |
 |--------|--------|--------|
 | 1 | 基础库 | Senparc.Weixin.dll |
 | 2 | 微信公众号 / 微信支付 / JSSDK / 摇周边 / 等等 | Senparc.Weixin.MP.dll  |
 | 3 | ASP.NET MVC 扩展 | Senparc.Weixin.MP.MVC.dll |
-| 4 | 微信企业号 | Senparc.Weixin.QY.dl |
+| 4 | 微信企业号 | Senparc.Weixin.QY.dll |
 | 5 | 微信开放平台 | Senparc.Weixin.Open.dll |
 | 6 | Redis 分布式缓存 | Senparc.Weixin.Cache.Redis.dll |
 | 7 | Memcached 分布式缓存 | Senparc.Weixin.Cache.Memcached.dll |
 
 
-本库为.NET4.5，其他.NET版本请看各自分支。
+本库为.NET4.5（包括 .NET Framework 及 .NET Core），其他.NET版本请看各自分支。
 
 * 已经支持所有微信6 API，包括自定义菜单/个性化菜单、模板信息接口、素材上传接口、群发接口、多客服接口、支付接口、微小店接口、卡券接口等等。
     > （同时由于易信的API目前与微信保持一致，此SDK也可以直接用于易信，如需使用易信的自定义菜单，通用接口改成易信的通讯地址即可）
@@ -22,28 +26,28 @@
 
 目前官方的API都已完美集成，除非有特殊说明，所有升级都会尽量确保向下兼容，所以已经发布的版本请放心使用或直接升级（覆盖）最新的[DLLs](https://github.com/JeffreySu/WeiXinMPSDK/tree/master/Senparc.Weixin.MP.BuildOutPut)。
 
-如果需要使用或修改此项目的源代码，建议先Fork。也欢迎将您修改的通用版本Pull Request过来。
 
 资源
 ----------------
 1. 官网地址：http://weixin.senparc.com/
+2. Demo 地址：http://sdk.weixin.senparc.com/
 2. 系列教程：http://www.cnblogs.com/szw/archive/2013/05/14/weixin-course-index.html
-3. 微信技术交流社区：http://www.weiweihi.com/QA
-4. 自定义菜单在线编辑工具：http://weixin.senparc.com/Menu
-5. 在线消息测试工具：http://weixin.senparc.com/SimulateTool
-6. 缓存测试工具：http://weixin.senparc.com/Cache/Test
-7. chm帮助文档下载：http://weixin.senparc.com/Document
+3. 微信技术交流社区：http://weixin.senparc.com/QA
+4. 自定义菜单在线编辑工具：http://sdk.weixin.senparc.com/Menu
+5. 在线消息测试工具：http://sdk.weixin.senparc.com/SimulateTool
+6. 缓存测试工具：http://sdk.weixin.senparc.com/Cache/Test
+7. chm帮助文档下载：http://sdk.weixin.senparc.com/Document
 8. 源代码及最新更新：https://github.com/JeffreySu/WeiXinMPSDK
 
-* 技术交流QQ群（目前未满可加：9群，其他群均已满）：
+* 技术交流QQ群（目前未满可加：11群，其他群均已满）：
 
-> 1群：300313885，2群：293958349，3群：342319110，4群：372212092
+> 1群：300313885，2群：293958349，3群：342319110，4群：372212092，5群：377815480
 
-> 5群：377815480，6群：425898825，7群：482942254，8群：106230270
-
-> 9群：539061281
+> 6群：425898825，7群：482942254，8群：106230270，9群：539061281
 
 > 10群（Redis / Memcached 分布式缓存群）：只加已经在使用的开发者。发送申请及截图至 zsu@senparc.com 或QQ：498977166，标题：Senparc.Weixin.Cache 加群申请
+
+> 11群：553198593
 
 * 业务联系QQ：498977166
 
@@ -56,7 +60,7 @@
 
 ###关注测试账号（SenparcRobot）：
 [![qrcode]](http://weixin.senparc.com/)
-[qrcode]: http://weixin.senparc.com/Images/qrcode.jpg
+[qrcode]: http://sdk.weixin.senparc.com/Images/qrcode.jpg
 
 
 微信公众平台开发系列教程：http://www.cnblogs.com/szw/archive/2013/05/14/weixin-course-index.html
@@ -329,8 +333,8 @@ PM> Install-Package Senparc.Weixin.Senparc.Weixin.Cache.Memcached
 
 资金捐助：
 
-[![donate]](http://weixin.senparc.com/)
-[donate]: http://weixin.senparc.com/Images/T1nAXdXb0jXXXXXXXX_s.png
+[![donate]](http://sdk.weixin.senparc.com/)
+[donate]: http://sdk.weixin.senparc.com/Images/T1nAXdXb0jXXXXXXXX_s.png
 
 
 图书众筹
@@ -338,7 +342,7 @@ PM> Install-Package Senparc.Weixin.Senparc.Weixin.Cache.Memcached
 扫描下方二维码参与《微信公众平台快速开发》图书众筹
 
 [![CrowdFunding]](http://www.weiweihi.com:8080/CrowdFunding/Home)  
-[CrowdFunding]: http://weixin.senparc.com/images/crowdfunding-qrcode.png
+[CrowdFunding]: http://sdk.weixin.senparc.com/images/crowdfunding-qrcode.png
 
 License
 --------------
